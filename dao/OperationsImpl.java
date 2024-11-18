@@ -170,6 +170,5 @@ public class OperationsImpl implements Operations {
         }
     }
 
-
 } // end of class
 
