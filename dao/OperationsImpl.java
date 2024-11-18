@@ -25,6 +25,8 @@ public class OperationsImpl implements Operations {
     @Override
     public Transaction addTrans(int num) {
 
+
+
         return null;
     }
 
