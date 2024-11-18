@@ -21,9 +21,9 @@ public interface Operations {
 
     int quantity(); // Natalia
 
-    double calcRes(String name);
+    double calcRes(String name, double amount);
 
-    double calcMarge(double sum);
+    double calcMarge(String currencyName);
 
     void saveToFile(String fileName); // Natalia
 

@@ -78,13 +78,9 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public double calcRes(String name) {
-        Scanner scanner = new Scanner(System.in);
-
-        // спрашиваем у пользователя сумму валюты для обмена
-        System.out.println("Enter the number of the currency to be exchanged with: ");
-        double amount = scanner.nextDouble();  // сумма, кот. пользователь хочет обменять
-
+    public double calcRes(String name, double amount) // название валюты и сумма для обмена
+    // если сумма 'amount' положительная — это покупка, если отрицательная — это продажа.
+    {
         CurrencyExchange currency = null; // ищем курс в enum
         for (CurrencyExchange ce : CurrencyExchange.values())
         {
@@ -103,39 +99,53 @@ public class OperationsImpl implements Operations {
         // получили курс из enum для валюты
         double rate = currency.getCurrent_exchange();
 
-        double rateWithMargin = 0;
+        // маржа для курса валюты, через метод calcMarge
+        double margin = calcMarge(name);
 
-        // уточняем тип операции (покупка или продажа) ?
-        System.out.println("Input the type of transaction (1 - buy, 2 - sell): ");
-        int operationType = scanner.nextInt();
+        double rateWithMargin = 0; // курс с маржей
 
-        //  1 - покупка, 2 - продажа
-        // считаем курс с маржей
-        double margin = rate * 0.05; // 5% от курса
-        if (operationType == 2) {  // продажа
-            //  маржа вычитается из курса
-            rateWithMargin = rate - margin;
-        } else {  // покупка
-            // маржа добавляется к курсу
-            rateWithMargin = rate + margin;
+        if (amount < 0) { //  если < 0 = продажа, иначе покупка
+            rateWithMargin = rate - margin;  // если продажа, то маржа вычитается
+        } else {
+            rateWithMargin = rate + margin;  // если покупка, то маржа добавляется
         }
 
-        // Рассчитываем результат обмена с учетом маржи
+        //  результат обмена с учетом маржи
         double result = 0;
-        if (operationType == 2) {  // продажа
-            result = amount * rateWithMargin;  // продаем валюту и получаем евро
-        } else {  // покупка
-            result = amount / rateWithMargin;  // покупаем валюту за евро
+        if (amount < 0) {  // опять, если сумма отрицательная — это продажа
+            result = Math.abs(amount) * rateWithMargin;  // продаем валюту и получаем евро
+        } else {  // Покупка
+            result = Math.abs(amount) / rateWithMargin;  // покупаем валюту за евро
         }
 
-        // результат обмена
-        System.out.println("Exchange result: " + result + " EUR");  // результат в EUR
+        System.out.println("Result of the exchange " + result + " EUR");
         return result;
     }
 
     @Override
-    public double calcMarge(double sum) {
-        return 0;
+    public double calcMarge(String currencyName)
+    {
+        //  курс по названию валюты
+        CurrencyExchange currency = null;
+        for (CurrencyExchange ce : CurrencyExchange.values()) {
+            if (ce.getCurrency_codes().equals(currencyName)) {
+                currency = ce;
+                break;
+            }
+        }
+
+        //  валюта не найдена, тогда -> 0
+        if (currency == null) {
+            System.out.println("Валюта с кодом " + currencyName + " не найдена.");
+            return 0;
+        }
+
+        // вытаскиваем курс для данной валюты
+        double rate = currency.getCurrent_exchange();
+
+        //  маржа (5% от курса)
+        double margin = rate * 0.05;
+        return margin;
     }
 
     @Override
