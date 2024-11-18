@@ -25,6 +25,10 @@ public interface Operations {
 
     double calcMarge(double sum);
 
+    void saveToFile(String fileName); // Natalia
+
+    void loadToFile(String fileName); // Natalia
+
     void printTrans();
 
 } // end of class

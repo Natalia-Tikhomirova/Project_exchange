@@ -3,6 +3,7 @@ package homework_48.project_exchange.dao;
 import homework_48.project_exchange.model.Transaction;
 import homework_48.project_exchange.view.CurrencyExchange;
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +24,27 @@ public class OperationsImpl implements Operations {
 
     @Override
     public Transaction addTrans(int num) {
-        return null;
+        // Создаём транзакцию, добавляем её в список
+        Transaction newTransaction = new Transaction(num, "USD", true, LocalDate.now(), 100.0, 5.0);
+        transactions.add(newTransaction);
+        return newTransaction;
     }
 
     @Override
     public Boolean removeTrans(int num) {
-        return null;
+        // Ищем транзакцию по номеру и удаляем
+        return transactions.removeIf(transaction -> transaction.getNumber() == num);
     }
 
     @Override
     public Transaction findTrans(int num) {
-        return null;
+        // Возвращаем транзакцию по номеру
+        for (Transaction transaction : transactions) {
+            if (transaction.getNumber() == num) {
+                return transaction;
+            }
+        }
+        return null; // Если не найдена
     }
 
     @Override
@@ -128,8 +139,35 @@ public class OperationsImpl implements Operations {
     }
 
     @Override
-    public void printTrans() {
+    public void saveToFile(String fileName) {
 
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            oos.writeObject(transactions);
+            System.out.println("Transactions successfully saved to file: " + fileName);
+        } catch (IOException e) {
+            System.out.println("Error saving: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void loadToFile(String fileName) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
+            transactions = (List<Transaction>) ois.readObject();
+            System.out.println("Transactions successfully loaded from file: " + fileName);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void printTrans() {
+        if (transactions.isEmpty()) {
+            System.out.println("The transaction list is empty.");
+        } else {
+            for (Transaction transaction : transactions) {
+                System.out.println(transaction);
+            }
+        }
     }
 
 
