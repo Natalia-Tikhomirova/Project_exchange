@@ -2,6 +2,7 @@ package homework_48.project_exchange.test;
 
 import homework_48.project_exchange.dao.OperationsImpl;
 import homework_48.project_exchange.model.Transaction;
+import homework_48.project_exchange.view.CurrencyExchange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -92,33 +93,31 @@ class OperationsImplTest {
 
     @Test
     void calcRes() {
-//        double result = operations.calcRes("USD");
-////         узнаем сколько всего различных валют есть
-//        assertEquals(1000, result, 0.01);
-////
-//        // предоставляем данные для обмена
-//        double amountToExchange = 100;
-//        String currencyName = "USD";
-//        String operationType ="true"; //продажа
-//
-//        // получаем курс из enum для валюты USD
-//        double rate = 1.5;
-//        double margin = rate * 0.05;  // 5% маржа
-//        double rateWithMargin = rate - margin;  // При продаже маржа вычитается
-//
-//        // ожидаемый результат от продажи валюты
-//        double expectedResult = amountToExchange * rateWithMargin;
-//
-//        double actualResult = operations.calcRes(currencyName);
-//
-//        assertEquals(expectedResult, actualResult, 0.01);
+        // тестируем покупку USD
+        double actualUsdBuying = operations.calcRes("USD", 100);
+
+        double expectedUsdBuying = 100 / (CurrencyExchange.USD.getCurrent_exchange() + CurrencyExchange.USD.getCurrent_exchange() * 0.05);//узнаем сколько получим с покупки 100 долларов
+        assertEquals(expectedUsdBuying, actualUsdBuying, 0.001);
+
+        // продажa USD
+        double actualUsdSell = operations.calcRes("USD", -100);
+        double expectedUsdSell = 100 * (CurrencyExchange.USD.getCurrent_exchange() - CurrencyExchange.USD.getCurrent_exchange() * 0.05);// узнаем сколько получим с продажи 100 долларов
+        assertEquals(expectedUsdSell, actualUsdSell, 0.001);
+
+        // делаем тест на покупку не существующей валюты
+        double invalidRes = operations.calcRes("INVALID", 100);
+        assertEquals(0, invalidRes);// так как валюты не существует, то и результат получим 0
     }
 
     @Test
     void calcMarge() {
-//        double marge = operations.calcMarge();
-//        double expected = (100 * 1.5) + (200 * 2.0) + (300 * 1.0) + (400 * 1.2);
-//        assertEquals(expected, marge, 0.1);
+        // рассчитываем маржу для доллара
+        double usdMargin = operations.calcMarge("USD");
+        assertEquals(0.05 * CurrencyExchange.USD.getCurrent_exchange(), usdMargin, 0.001);
+
+        // несуществующая валюта
+        double invalidMargin = operations.calcMarge("INVALID");
+        assertEquals(0, invalidMargin);// так как такой валюты нет, то и маржа будет 0
     }
 
 } // end of class
