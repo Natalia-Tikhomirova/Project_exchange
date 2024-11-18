@@ -24,10 +24,8 @@ public class OperationsImpl implements Operations {
 
     @Override
     public Transaction addTrans(int num) {
-        // Создаём транзакцию, добавляем её в список
-        Transaction newTransaction = new Transaction(num, "USD", true, LocalDate.now(), 100.0, 5.0);
-        transactions.add(newTransaction);
-        return newTransaction;
+
+        return null;
     }
 
     @Override
