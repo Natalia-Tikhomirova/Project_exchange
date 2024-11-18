@@ -91,10 +91,33 @@ class OperationsImplTest {
 
     @Test
     void calcRes() {
+        double result = operations.calcRes("USD");
+//         узнаем сколько всего различных валют есть
+        assertEquals(1000, result, 0.01);
+//
+//        // предоставляем данные для обмена
+//        double amountToExchange = 100;
+//        String currencyName = "USD";
+//        String operationType ="true"; //продажа
+//
+//        // получаем курс из enum для валюты USD
+//        double rate = 1.5;
+//        double margin = rate * 0.05;  // 5% маржа
+//        double rateWithMargin = rate - margin;  // При продаже маржа вычитается
+//
+//        // ожидаемый результат от продажи валюты
+//        double expectedResult = amountToExchange * rateWithMargin;
+//
+//        double actualResult = operations.calcRes(currencyName);
+//
+//        assertEquals(expectedResult, actualResult, 0.01);
     }
 
     @Test
     void calcMarge() {
+//        double marge = operations.calcMarge();
+//        double expected = (100 * 1.5) + (200 * 2.0) + (300 * 1.0) + (400 * 1.2);
+//        assertEquals(expected, marge, 0.1);
     }
 
 } // end of class
