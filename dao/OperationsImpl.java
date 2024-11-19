@@ -136,7 +136,7 @@ public class OperationsImpl implements Operations {
 
         //  валюта не найдена, тогда -> 0
         if (currency == null) {
-            System.out.println("Валюта с кодом " + currencyName + " не найдена.");
+            System.out.println("Currency with code " + currencyName + " not found.");
             return 0;
         }
 
